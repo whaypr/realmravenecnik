@@ -30,17 +30,26 @@ async def add(ctx, *args):
 
 
 @client.command(aliases=['remo'])
-async def remove(ctx, word, *args):
+async def remove(ctx, *args):
     '''Remove word to wordlist'''
 
-    try:
-        wordlist.remove(word)
-    except:
-        await ctx.send(f'{word} není v seznamu')
-        return
+    old_words = [ x.strip() for x in ' '.join(args).split(',') ]
+    count = 0
 
-    await ctx.send('Slovo odebráno!')
-    s3_sync(wordlist)
+    for word in old_words:
+        if word == '':
+            continue
+
+        try:
+            wordlist.remove(word)
+            count += 1
+        except:
+            await ctx.send(f'{word} není v seznamu')
+            continue
+
+    if count > 0:
+        await ctx.send('Slova odebrána')
+        s3_sync(wordlist)
 
 
 @client.command(aliases=['wordlist', 'wl'])
