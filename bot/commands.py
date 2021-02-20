@@ -21,6 +21,8 @@ async def add(ctx, *args):
             await ctx.send(f'{word} už je v seznamu')
             continue
 
+        global wl_tmp
+        wl_tmp.append(word)
         wordlist.append(word)
         count += 1
 
@@ -41,6 +43,8 @@ async def remove(ctx, *args):
             continue
 
         try:
+            global wl_tmp
+            wl_tmp.remove(word)
             wordlist.remove(word)
             count += 1
         except:
