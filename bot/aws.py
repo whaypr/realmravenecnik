@@ -1,5 +1,5 @@
 import os
-import pickle
+import pickle5 as pickle
 import boto3
 
 ACCESS_KEY = os.environ['ACCESS_KEY']
@@ -18,7 +18,8 @@ try:
 
     with open('wordlist.pickle', 'rb') as handle:
         wordlist = pickle.load(handle)
-except:
+except Exception as e:
+        print('Wordlist not found!\n', e)
         wordlist = []
 
 
