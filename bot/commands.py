@@ -11,9 +11,10 @@ wl_tmp = copy.deepcopy(wordlist)
 async def add(ctx, *args):
     '''Add words to wordlist'''
 
-    for word in args:
-        word = word.replace(',', '').strip()
+    new_words = [ x.strip() for x in ' '.join(args).split(',') ]
+    count = 0
 
+    for word in new_words:
         if word == '':
             continue
         elif word in wordlist:
@@ -21,9 +22,11 @@ async def add(ctx, *args):
             continue
 
         wordlist.append(word)
+        count += 1
 
-    await ctx.send('Slova přidána!')
-    s3_sync(wordlist)
+    if count > 0:
+        await ctx.send('Slova přidána')
+        s3_sync(wordlist)
 
 
 @client.command(aliases=['remo'])
