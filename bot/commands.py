@@ -68,6 +68,11 @@ async def words(ctx, *args):
     if res == '':
         await ctx.send('Seznam je prázdný')    
     else:
+        while len(res) > 1900:
+            tmp = res[0:1900]
+            res = res[1900:len(res)]
+
+            await ctx.send(tmp)
         await ctx.send(res)
 
 
@@ -108,4 +113,4 @@ async def reset(ctx, *args):
     global wl_tmp
     wl_tmp = copy.deepcopy(wordlist)
 
-    await ctx.send('Resetováno!')
+    await ctx.send('Resetováno')
