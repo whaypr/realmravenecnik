@@ -2,6 +2,8 @@ from bot import client
 from aws import s3_sync, wordlist
 
 from random import randrange
+import requests
+from bs4 import BeautifulSoup
 import copy
 
 wl_tmp = copy.deepcopy(wordlist)
@@ -114,3 +116,22 @@ async def reset(ctx, *args):
     wl_tmp = copy.deepcopy(wordlist)
 
     await ctx.send('Resetováno')
+
+
+#######################################
+
+
+@client.command(aliases=['cut'])
+async def cute(ctx, *args):
+    '''Random cute animal'''
+
+    if str(ctx.channel.id) != '819249350156353578':
+        return
+
+    image_number = randrange(9999)
+
+    page = requests.get(f'http://attackofthecute.com/on/?i={image_number}')
+    soup = BeautifulSoup(page.content, 'html.parser')
+    image_link = soup.find('div', class_='image').find('img')['src']
+
+    await ctx.send(image_link)
