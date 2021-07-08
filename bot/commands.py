@@ -1,9 +1,8 @@
 from bot import client
 from aws import s3_sync, wordlist
 
-from random import randrange
 import requests
-from bs4 import BeautifulSoup
+import random
 import copy
 
 wl_tmp = copy.deepcopy(wordlist)
@@ -120,18 +119,23 @@ async def reset(ctx, *args):
 
 #######################################
 
-
 @client.command(aliases=['cut'])
 async def cute(ctx, *args):
     '''Random cute animal'''
 
-    if str(ctx.channel.id) != '819249350156353578':
+    # on napotitku server but not in pure-cuteness channel
+    if str(ctx.guild.id) == '537212948460863498' and str(ctx.channel.id) != '819249350156353578':
         return
 
-    image_number = randrange(9999)
+    subreddits = ['aww', 'Awww', 'cute_animals', 'babyanimals']
+    limit = 1
+    timeframe = 'all' #hour, day, week, month, year, all
+    listing = 'random' # controversial, best, hot, new, random, rising, top
+    base_url = f'https://www.reddit.com/r/{random.choice(subreddits)}/{listing}.json?limit={limit}&t={timeframe}'
 
-    page = requests.get(f'http://attackofthecute.com/on/?i={image_number}')
-    soup = BeautifulSoup(page.content, 'html.parser')
-    image_link = soup.find('div', class_='image').find('img')['src']
+    res = ""
+    while not res.lower().endswith(('.jpg', '.png', '.gif', '.jpeg')):
+        response = requests.get(base_url, headers = {'User-agent': 'Pure cuteness dealer'}).json()
+        res = response[0]["data"]["children"][0]["data"]["url"]
 
-    await ctx.send(image_link)
+    await ctx.send(res)
