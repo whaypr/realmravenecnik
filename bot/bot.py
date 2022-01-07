@@ -1,2 +1,7 @@
 from discord.ext import commands
-client = commands.Bot('!')
+from discord import Game
+
+client = commands.Bot(
+    command_prefix='!',
+    activity=Game("with ants")
+)
