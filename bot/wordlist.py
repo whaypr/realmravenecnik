@@ -9,8 +9,8 @@ import copy
 
 
 class Database:
-    def __init__(self, host, name, user, passwd):
-        self.connection = psycopg2.connect(dbname=name, user=user, password=passwd, host=host)
+    def __init__(self, url):
+        self.connection = psycopg2.connect(url)
         self.cursor = self.connection.cursor()
 
     def __del__(self):
@@ -21,12 +21,7 @@ class Database:
 class Wordlist(commands.Cog):
 # CONSTRUCTOR
     def __init__(self):
-        self.db = Database(
-            "ec2-18-203-64-130.eu-west-1.compute.amazonaws.com",
-            environ['DB_NAME'],
-            environ['DB_USER'],
-            environ['DB_PASS']
-        )
+        self.db = Database( environ.get('DATABASE_URL') )
 
         create_table = """
         CREATE TABLE IF NOT EXISTS
