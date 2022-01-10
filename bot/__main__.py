@@ -1,5 +1,5 @@
 from bot import client
-import events, commands
+import events, wordlist, cute
 
 import os
 try:
